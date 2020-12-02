@@ -22,3 +22,24 @@ Entorno de telemedicina para el seguimiento de complicaciones postquirúrgicas e
 Master's Thesis – Universitat de les Illes Balears
 ``` 
 
+## Installation
+
+To install the library, simply run the command :
+```
+pip install staples-detection
+```
+
+To use it, import the library:
+```
+import staples_detection
+```
+
+## Example
+
+To be able to detect staples in the image, the StapleDetector object must be initialized, passing the image to be analyzed as a parameter. The library itself contains a method for loading the two demo images provided.
+
+For example, to analyse the following image (which corresponds to the image `img001.png`) just execute the following code:
+
+<p align="center">
+  <img src="staples_detection/assets/img001.png" height="400">
+</p>
