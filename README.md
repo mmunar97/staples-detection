@@ -38,8 +38,24 @@ import staples_detection
 
 To be able to detect staples in the image, the StapleDetector object must be initialized, passing the image to be analyzed as a parameter. The library itself contains a method for loading the two demo images provided.
 
-For example, to analyse the following image (which corresponds to the image `img001.png`) just execute the following code:
-
 <p align="center">
-  <img src="staples_detection/assets/img001.png" height="400">
+  <img src="staples_detection/assets/img001.png" height="200">
 </p>
+
+For example, to analyse the image above (which corresponds to the image `img001.png`) just execute the following code:
+
+```
+detector = StapleDetector(get_example_asset(number=1))
+
+horizontal_staple_detection_result = detector.detect_staples(StapleDetectionMethod.HORIZONTAL_GRADIENT)
+vertical_staple_detection_result = detector.detect_staples(StapleDetectionMethod.VERTICAL_GRADIENT)
+combined_staple_detection_result = detector.detect_staples(StapleDetectionMethod.COMBINED_GRADIENT)
+```
+
+The function `detect_staples` returns a `GradientStapleDetectionResult` object, containing the time spent in each method and the partial steps (for example, binarization and morphological dilations).
+
+```
+Time spent – Horizontal gradient: 1.17761 s
+Time spent – Vertical gradient: 1.10948 s
+Time spent – Combined gradient: 2.23928 s
+```

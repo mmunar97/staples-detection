@@ -69,4 +69,4 @@ class GradientStapleDetectionResult:
 
         self.final_mask: numpy.ndarray = final_mask
         self.colormask: numpy.ndarray = colormask
-        self.elapsed_time = elapsed_time
+        self.elapsed_time = round(elapsed_time, 5)
