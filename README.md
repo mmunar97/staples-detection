@@ -60,14 +60,21 @@ Time spent – Vertical gradient: 1.10948 s
 Time spent – Combined gradient: 2.23928 s
 ```
 
-<p align="center">
-  <img src="staples_detection/assets/results_img001/combined_result001.png" height="200">
-</p>
+The results obtained are as follows. Applying horizontal gradient:
 
 <p align="center">
   <img src="staples_detection/assets/results_img001/horizontal_result001.png" height="200">
 </p>
 
+Applying vertical gradient:
+
 <p align="center">
   <img src="staples_detection/assets/results_img001/vertical_result001.png" height="200">
 </p>
+
+Applying combined gradients:
+
+<p align="center">
+  <img src="staples_detection/assets/results_img001/combined_result001.png" height="200">
+</p>
+
