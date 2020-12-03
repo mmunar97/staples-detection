@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='staples_detection',
-    version='1.0',
+    version='1.1',
     packages=['staples_detection'],
     url='https://github.com/mmunar97',
     license='mit',
@@ -13,6 +13,7 @@ setup(
     install_requires=[
         "numpy",
         "scipy",
-        "scikit-image"
+        "scikit-image",
+        "opencv-python"
     ]
 )
