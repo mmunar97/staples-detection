@@ -2,6 +2,8 @@ from typing import List
 
 import numpy
 
+from staples_detection.base.result.mask_detection_result import MaskDetectionResult
+
 
 class GradientDirectionResult:
 
@@ -55,7 +57,7 @@ class GradientDirectionResult:
         self.colormask = colormask
 
 
-class GradientStapleDetectionResult:
+class GradientStapleDetectionResult(MaskDetectionResult):
 
     def __init__(self,
                  vertical_gradient_result: GradientDirectionResult,
@@ -64,9 +66,7 @@ class GradientStapleDetectionResult:
                  colormask: numpy.ndarray,
                  elapsed_time: float):
 
+        super(GradientStapleDetectionResult, self).__init__(final_mask, colormask, elapsed_time)
+
         self.vertical_gradient_result: GradientDirectionResult = vertical_gradient_result
         self.horizontal_gradient_result: GradientDirectionResult = horizontal_gradient_result
-
-        self.final_mask: numpy.ndarray = final_mask
-        self.colormask: numpy.ndarray = colormask
-        self.elapsed_time = round(elapsed_time, 5)

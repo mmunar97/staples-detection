@@ -24,7 +24,7 @@ Master's Thesis – Universitat de les Illes Balears
 
 ## Installation
 
-To install the library, simply run the command :
+To install the library, simply run the command:
 ```
 pip install staples-detection
 ```
@@ -50,6 +50,7 @@ detector = StapleDetector(get_example_asset(number=1))
 horizontal_staple_detection_result = detector.detect_staples(StapleDetectionMethod.HORIZONTAL_GRADIENT)
 vertical_staple_detection_result = detector.detect_staples(StapleDetectionMethod.VERTICAL_GRADIENT)
 combined_staple_detection_result = detector.detect_staples(StapleDetectionMethod.COMBINED_GRADIENT)
+canny_staple_detection_result = detector.detect_staples(StapleDetectionMethod.CANNY)
 ```
 
 The function `detect_staples` returns a `GradientStapleDetectionResult` object, containing the time spent in each method and the partial steps (for example, binarization and morphological dilations).
@@ -58,6 +59,7 @@ The function `detect_staples` returns a `GradientStapleDetectionResult` object, 
 Time spent – Horizontal gradient: 1.17761 s
 Time spent – Vertical gradient: 1.10948 s
 Time spent – Combined gradient: 2.23928 s
+Time spent – Canny: 0.2543 s
 ```
 
 The results obtained are as follows. Applying horizontal gradient:
@@ -78,3 +80,8 @@ Applying combined gradients:
   <img src="staples_detection/assets/results_img001/combined_result001.png" height="200">
 </p>
 
+Applying modified Canny:
+
+<p align="center">
+  <img src="staples_detection/assets/results_img001/canny_result001.png" height="200">
+</p>

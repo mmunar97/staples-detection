@@ -11,12 +11,14 @@ if __name__ == "__main__":
     horizontal_staple_detection_result = detector.detect_staples(StapleDetectionMethod.HORIZONTAL_GRADIENT)
     vertical_staple_detection_result = detector.detect_staples(StapleDetectionMethod.VERTICAL_GRADIENT)
     combined_staple_detection_result = detector.detect_staples(StapleDetectionMethod.COMBINED_GRADIENT)
+    canny_staple_detection_result = detector.detect_staples(StapleDetectionMethod.CANNY)
 
     print(f"Time spent – Horizontal gradient: {horizontal_staple_detection_result.elapsed_time} s")
     print(f"Time spent – Vertical gradient: {vertical_staple_detection_result.elapsed_time} s")
     print(f"Time spent – Combined gradient: {combined_staple_detection_result.elapsed_time} s")
+    print(f"Time spent – Canny: {canny_staple_detection_result.elapsed_time} s")
 
-
-    #imsave("/Users/marcmunar/Desktop/horizontal_result001.png", horizontal_staple_detection_result.colormask)
-    #imsave("/Users/marcmunar/Desktop/vertical_result001.png", vertical_staple_detection_result.colormask)
-    #imsave("/Users/marcmunar/Desktop/combined_result001.png", combined_staple_detection_result.colormask)
+    imsave("/Users/marcmunar/Desktop/horizontal_result001.png", horizontal_staple_detection_result.colormask)
+    imsave("/Users/marcmunar/Desktop/vertical_result001.png", vertical_staple_detection_result.colormask)
+    imsave("/Users/marcmunar/Desktop/combined_result001.png", combined_staple_detection_result.colormask)
+    imsave("/Users/marcmunar/Desktop/canny_result001.png", canny_staple_detection_result.colormask)

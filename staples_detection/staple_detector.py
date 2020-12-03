@@ -1,8 +1,8 @@
 import numpy
 
+from staples_detection.base.result.mask_detection_result import MaskDetectionResult
 from staples_detection.base.staple_detection_methods import StapleDetectionMethod
-from staples_detection.algorithms.utils import generate_mask
-from staples_detection.base.staple_detection_result import GradientStapleDetectionResult
+from staples_detection.algorithms import gradient, canny
 
 
 class StapleDetector:
@@ -18,7 +18,7 @@ class StapleDetector:
 
     def detect_staples(self,
                        method: StapleDetectionMethod = StapleDetectionMethod.COMBINED_GRADIENT,
-                       **kwargs) -> GradientStapleDetectionResult:
+                       **kwargs) -> MaskDetectionResult:
         """
         Detects the staples in an image.
 
@@ -29,4 +29,7 @@ class StapleDetector:
         Returns:
             A GradientStapleDetectionResult, containing the partial results of each process and the global elapsed time.
         """
-        return generate_mask(self.__image, method, **kwargs)
+        if method == StapleDetectionMethod.CANNY:
+            return canny.generate_canny_mask(self.__image, **kwargs)
+        else:
+            return gradient.generate_gradient_mask(self.__image, method, **kwargs)
