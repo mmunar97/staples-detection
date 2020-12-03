@@ -1,1 +1,1 @@
-recursive-include staples_detection/assets *.png
+recursive-include staples_detection *

@@ -8,6 +8,9 @@ class MaskDetectionResult:
                  colormask: numpy.ndarray,
                  elapsed_time: float):
 
-        self.final_mask = final_mask
+        self.final_binary_mask = final_mask
         self.colormask = colormask
         self.elapsed_time = round(elapsed_time, 5)
+
+        self.final_mask = numpy.zeros_like(self.final_binary_mask)
+        self.final_mask[self.final_binary_mask == True] = 255
