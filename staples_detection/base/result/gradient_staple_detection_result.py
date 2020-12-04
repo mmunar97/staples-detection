@@ -58,15 +58,19 @@ class GradientDirectionResult:
 
 
 class GradientStapleDetectionResult(MaskDetectionResult):
-
+    """
+    Object that stores the results of the Gradient algorithm. Furthermore, contains the performance metrics
+    of the classification.
+    """
     def __init__(self,
                  vertical_gradient_result: GradientDirectionResult,
                  horizontal_gradient_result: GradientDirectionResult,
                  final_mask: numpy.ndarray,
                  colormask: numpy.ndarray,
-                 elapsed_time: float):
+                 elapsed_time: float,
+                 ground_truth_mask: numpy.ndarray):
 
-        super(GradientStapleDetectionResult, self).__init__(final_mask, colormask, elapsed_time)
+        super(GradientStapleDetectionResult, self).__init__(final_mask, colormask, elapsed_time, ground_truth_mask)
 
         self.vertical_gradient_result: GradientDirectionResult = vertical_gradient_result
         self.horizontal_gradient_result: GradientDirectionResult = horizontal_gradient_result

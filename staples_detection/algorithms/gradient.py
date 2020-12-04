@@ -12,6 +12,7 @@ from staples_detection.base.result.gradient_staple_detection_result import Gradi
 
 def generate_gradient_mask(image: numpy.ndarray,
                            gradient_method: StapleDetectionMethod,
+                           ground_truth_mask: numpy.ndarray,
                            **kwargs) -> GradientStapleDetectionResult:
     """
     Detects the staples in an image with a certain method.
@@ -19,6 +20,7 @@ def generate_gradient_mask(image: numpy.ndarray,
     Args:
         image: A numpy array, representing the RGB image in [0, 1] range.
         gradient_method: A StapleDetectionMethod value, representing the method to be used.
+        ground_truth_mask: A numpy array, representing the ground truth mask of the detection.
         **kwargs: The parameters of the different methods.
 
     Returns:
@@ -40,7 +42,8 @@ def generate_gradient_mask(image: numpy.ndarray,
                                              horizontal_gradient_result=horizontal_gradient_result,
                                              final_mask=final_mask,
                                              colormask=colormask,
-                                             elapsed_time=elapsed_time)
+                                             elapsed_time=elapsed_time,
+                                             ground_truth_mask=ground_truth_mask)
 
     elif gradient_method == StapleDetectionMethod.VERTICAL_GRADIENT:
         elapsed_time = time.time()
@@ -52,7 +55,8 @@ def generate_gradient_mask(image: numpy.ndarray,
                                              horizontal_gradient_result=None,
                                              final_mask=vertical_gradient_result.final_mask,
                                              colormask=vertical_gradient_result.colormask,
-                                             elapsed_time=elapsed_time)
+                                             elapsed_time=elapsed_time,
+                                             ground_truth_mask=ground_truth_mask)
 
     elif gradient_method == StapleDetectionMethod.HORIZONTAL_GRADIENT:
         elapsed_time = time.time()
@@ -64,7 +68,8 @@ def generate_gradient_mask(image: numpy.ndarray,
                                              horizontal_gradient_result=horizontal_gradient_result,
                                              final_mask=horizontal_gradient_result.final_mask,
                                              colormask=horizontal_gradient_result.colormask,
-                                             elapsed_time=elapsed_time)
+                                             elapsed_time=elapsed_time,
+                                             ground_truth_mask=ground_truth_mask)
 
 
 def generate_gradient_staple_result(image: numpy.ndarray, gradient_method: StapleDetectionMethod,

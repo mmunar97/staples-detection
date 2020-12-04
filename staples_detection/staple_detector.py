@@ -18,18 +18,21 @@ class StapleDetector:
 
     def detect_staples(self,
                        method: StapleDetectionMethod = StapleDetectionMethod.COMBINED_GRADIENT,
+                       ground_truth_mask: numpy.ndarray = None,
                        **kwargs) -> MaskDetectionResult:
         """
         Detects the staples in an image.
 
         Args:
             method: A StapleDetectionMethod value, representing the method to be used.
+            ground_truth_mask: Represents the ground truth mask. If it is passed, the results contains the performance
+                               metrics.
             **kwargs: The parameters of the different methods.
 
         Returns:
             A GradientStapleDetectionResult, containing the partial results of each process and the global elapsed time.
         """
         if method == StapleDetectionMethod.CANNY:
-            return canny.generate_canny_mask(self.__image, **kwargs)
+            return canny.generate_canny_mask(self.__image, ground_truth_mask, **kwargs)
         else:
-            return gradient.generate_gradient_mask(self.__image, method, **kwargs)
+            return gradient.generate_gradient_mask(self.__image, method, ground_truth_mask, **kwargs)
