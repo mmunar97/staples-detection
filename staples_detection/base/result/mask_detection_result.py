@@ -15,7 +15,7 @@ class MaskDetectionResult:
                  elapsed_time: float,
                  ground_truth: numpy.ndarray = None):
 
-        self.final_binary_mask = final_mask.astype(int)
+        self.final_binary_mask = final_mask.astype(bool)
         self.colormask = colormask
         self.elapsed_time = round(elapsed_time, 5)
 
@@ -27,4 +27,4 @@ class MaskDetectionResult:
             self.performance = None
         else:
             self.performance = MaskPerformance()
-            self.performance.compute_raw_performance(prediction_mask=self.final_mask, ground_truth_mask=ground_truth)
+            self.performance.compute_raw_performance(prediction_mask=self.final_binary_mask, ground_truth_mask=ground_truth)

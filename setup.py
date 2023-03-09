@@ -14,6 +14,7 @@ setup(
         "numpy",
         "scipy",
         "scikit-image",
-        "opencv-python"
+        "opencv-python",
+        "discrete-morphology==1.0.1"
     ]
 )

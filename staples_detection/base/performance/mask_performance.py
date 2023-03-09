@@ -3,15 +3,12 @@ import numpy
 
 class MaskPerformance:
 
-    def __init__(self, true_positive: int = 0,
-                 true_negative: int = 0,
-                 false_positive: int = 0,
-                 false_negative: int = 0):
+    def __init__(self):
 
-        self.true_positive: int = true_positive
-        self.true_negative: int = true_negative
-        self.false_positive: int = false_positive
-        self.false_negative: int = false_negative
+        self.true_positive: int = None
+        self.true_negative: int = None
+        self.false_positive: int = None
+        self.false_negative: int = None
 
     # region Raw performance metrics
     def compute_raw_performance(self, prediction_mask: numpy.ndarray, ground_truth_mask: numpy.ndarray):
@@ -40,7 +37,7 @@ class MaskPerformance:
         Returns:
             An integer, representing the number of true positives.
         """
-        return int(numpy.sum(numpy.logical_and(prediction_mask == 255, ground_truth_mask == 255)))
+        return int(numpy.sum(numpy.logical_and(prediction_mask == True, ground_truth_mask == True)))
 
     @staticmethod
     def __compute_true_negative(prediction_mask: numpy.ndarray, ground_truth_mask: numpy.ndarray) -> int:
@@ -55,7 +52,7 @@ class MaskPerformance:
         Returns:
             An integer, representing the number of true negatives.
         """
-        return int(numpy.sum(numpy.logical_and(prediction_mask == 0, ground_truth_mask == 0)))
+        return int(numpy.sum(numpy.logical_and(prediction_mask == False, ground_truth_mask == False)))
 
     @staticmethod
     def __compute_false_positive(prediction_mask: numpy.ndarray, ground_truth_mask: numpy.ndarray) -> int:
@@ -70,7 +67,7 @@ class MaskPerformance:
         Returns:
             An integer, representing the number of false positives.
         """
-        return int(numpy.sum(numpy.logical_and(prediction_mask == 255, ground_truth_mask == 0)))
+        return int(numpy.sum(numpy.logical_and(prediction_mask == True, ground_truth_mask == False)))
 
     @staticmethod
     def __compute_false_negative(prediction_mask: numpy.ndarray, ground_truth_mask: numpy.ndarray) -> int:
@@ -85,7 +82,7 @@ class MaskPerformance:
         Returns:
             An integer, representing the number of false negatives.
         """
-        return int(numpy.sum(numpy.logical_and(prediction_mask == 0, ground_truth_mask == 255)))
+        return int(numpy.sum(numpy.logical_and(prediction_mask == False, ground_truth_mask == True)))
     # endregion
 
     # region Performance metrics
@@ -103,4 +100,13 @@ class MaskPerformance:
         """
         return (self.true_positive * self.true_negative - self.false_positive * self.false_negative) / \
                numpy.sqrt(float((self.true_positive + self.false_positive) * (self.true_positive + self.false_negative) * (self.true_negative + self.false_positive) * (self.true_negative + self.false_negative)))
+
+    def intersection_over_union(self) -> float:
+        """
+        Computes the Intersection Over Union metric, also known as Jaccard index.
+
+        Returns:
+            A float value, representing the IOU.
+        """
+        return self.true_positive/(self.true_positive+self.false_positive+self.false_negative)
     # endregion

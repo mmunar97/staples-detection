@@ -12,7 +12,8 @@ from staples_detection.base.result.gradient_staple_detection_result import Gradi
 
 def generate_gradient_mask(image: numpy.ndarray,
                            gradient_method: StapleDetectionMethod,
-                           ground_truth_mask: numpy.ndarray,
+                           restricted_region: numpy.ndarray,
+                           ground_truth_mask: numpy.ndarray = None,
                            **kwargs) -> GradientStapleDetectionResult:
     """
     Detects the staples in an image with a certain method.
@@ -20,6 +21,9 @@ def generate_gradient_mask(image: numpy.ndarray,
     Args:
         image: A numpy array, representing the RGB image in [0, 1] range.
         gradient_method: A StapleDetectionMethod value, representing the method to be used.
+        restricted_region: A boolean numpy array, with the same size as the image, representing the region where the staples
+                               want to be detected. The final mask will be the intersection (element-wise and operation) of the
+                               generated mask and this mask.
         ground_truth_mask: A numpy array, representing the ground truth mask of the detection.
         **kwargs: The parameters of the different methods.
 
@@ -34,7 +38,7 @@ def generate_gradient_mask(image: numpy.ndarray,
         horizontal_gradient_result = generate_gradient_staple_result(image, StapleDetectionMethod.HORIZONTAL_GRADIENT,
                                                                      **kwargs)
 
-        final_mask = vertical_gradient_result.final_mask | horizontal_gradient_result.final_mask
+        final_mask = restricted_region & (vertical_gradient_result.final_mask | horizontal_gradient_result.final_mask)
         colormask = draw_mask_over_image(image, final_mask)
         elapsed_time = time.time() - elapsed_time
 
@@ -49,12 +53,14 @@ def generate_gradient_mask(image: numpy.ndarray,
         elapsed_time = time.time()
         vertical_gradient_result = generate_gradient_staple_result(image, StapleDetectionMethod.VERTICAL_GRADIENT,
                                                                    **kwargs)
+        final_mask = restricted_region & vertical_gradient_result.final_mask
+        colormask = draw_mask_over_image(image, final_mask)
         elapsed_time = time.time() - elapsed_time
 
         return GradientStapleDetectionResult(vertical_gradient_result=vertical_gradient_result,
                                              horizontal_gradient_result=None,
-                                             final_mask=vertical_gradient_result.final_mask,
-                                             colormask=vertical_gradient_result.colormask,
+                                             final_mask=final_mask,
+                                             colormask=colormask,
                                              elapsed_time=elapsed_time,
                                              ground_truth_mask=ground_truth_mask)
 
@@ -62,12 +68,14 @@ def generate_gradient_mask(image: numpy.ndarray,
         elapsed_time = time.time()
         horizontal_gradient_result = generate_gradient_staple_result(image, StapleDetectionMethod.HORIZONTAL_GRADIENT,
                                                                      **kwargs)
+        final_mask = restricted_region & horizontal_gradient_result.final_mask
+        colormask = draw_mask_over_image(image, final_mask)
         elapsed_time = time.time() - elapsed_time
 
         return GradientStapleDetectionResult(vertical_gradient_result=None,
                                              horizontal_gradient_result=horizontal_gradient_result,
-                                             final_mask=horizontal_gradient_result.final_mask,
-                                             colormask=horizontal_gradient_result.colormask,
+                                             final_mask=final_mask,
+                                             colormask=colormask,
                                              elapsed_time=elapsed_time,
                                              ground_truth_mask=ground_truth_mask)
 
@@ -90,7 +98,7 @@ def generate_gradient_staple_result(image: numpy.ndarray, gradient_method: Stapl
     morphological_closing_se: numpy.ndarray = kwargs.get("morphological_closing_structuring_element",
                                                          numpy.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]))
     area_filtering_threshold: float = kwargs.get("area_filtering_threshold", 50)
-    number_dilations: int = kwargs.get("mask_number_dilations", 4)
+    number_dilations: int = kwargs.get("mask_number_dilations", 2)
     morphological_dilation_se: numpy.ndarray = kwargs.get("morphological_dilation_structuring_element",
                                                           numpy.array([[1, 1, 1], [1, 1, 1], [1, 1, 1]]))
     # END
@@ -141,10 +149,10 @@ def sobel_vertical_gradient(image: numpy.ndarray) -> numpy.ndarray:
     Computes the Sobel gradient in the vertical direction.
 
     Args:
-        image: A two dimensional array, representing the image from which the vertical gradient will be calculated.
+        image: A two-dimensional array, representing the image from which the vertical gradient will be calculated.
 
     Returns:
-        A two dimensional array, representing the vertical gradient of the image.
+        A two-dimensional array, representing the vertical gradient of the image.
     """
     ky = numpy.array([[1, 2, 1],
                       [0, 0, 0],
@@ -157,10 +165,10 @@ def sobel_horizontal_gradient(image: numpy.ndarray) -> numpy.ndarray:
     Computes the Sobel gradient in the horizontal direction.
 
     Args:
-        image: A two dimensional array, representing the image from which the horizontal gradient will be calculated.
+        image: A two-dimensional array, representing the image from which the horizontal gradient will be calculated.
 
     Returns:
-        A two dimensional array, representing the horizontal gradient of the image.
+        A two-dimensional array, representing the horizontal gradient of the image.
     """
     kx = numpy.array([[-1, 0, 1],
                       [-2, 0, 2],
@@ -173,11 +181,11 @@ def binarize_image(image: numpy.ndarray, threshold: float) -> numpy.ndarray:
     Binarizes the image with a threshold.
 
     Args:
-        image: A two dimensional array, representing the image to be binarized.
+        image: A two-dimensional array, representing the image to be binarized.
         threshold: A float value, representing the threshold in the binarization.
 
     Returns:
-        A two dimensional array, representing the binary image.
+        A two-dimensional array, representing the binary image.
     """
     binary_image = image.copy()
 

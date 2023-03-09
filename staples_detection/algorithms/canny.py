@@ -6,13 +6,18 @@ from staples_detection.algorithms.utils import *
 from staples_detection.base.result.canny_staple_detection_result import CannyStapleDetectionResult
 
 
-def generate_canny_mask(image: numpy.ndarray, ground_truth_mask: numpy.ndarray = None,
+def generate_canny_mask(image: numpy.ndarray,
+                        restricted_region: numpy.ndarray,
+                        ground_truth_mask: numpy.ndarray = None,
                         **kwargs) -> CannyStapleDetectionResult:
     """
-    Detects the staples in an image with a the Canny method.
+    Detects the staples in an image with the Canny method.
 
     Args:
         image: A numpy array, representing the RGB image in [0, 1] range.
+        restricted_region: A boolean numpy array, with the same size as the image, representing the region where the staples
+                               want to be detected. The final mask will be the intersection (element-wise and operation) of the
+                               generated mask and this mask.
         ground_truth_mask: A numpy array, representing the ground truth mask of the detection.
         **kwargs: The parameters of the method.
 
@@ -45,10 +50,11 @@ def generate_canny_mask(image: numpy.ndarray, ground_truth_mask: numpy.ndarray =
         if sizes[i] >= area_threshold:
             filtered_image[output == i + 1] = True
 
-    filtered_image = cv2.dilate(filtered_image, morphological_kernel, iterations=2)
+    filtered_image = cv2.dilate(filtered_image, morphological_kernel, iterations=2).astype(bool)
+    final_mask = restricted_region & filtered_image
 
     elapsed_time = time.time()-elapsed_time
 
-    return CannyStapleDetectionResult(filtered_image, draw_mask_over_image(image, filtered_image),
+    return CannyStapleDetectionResult(final_mask, draw_mask_over_image(image, final_mask),
                                       elapsed_time, ground_truth_mask)
 

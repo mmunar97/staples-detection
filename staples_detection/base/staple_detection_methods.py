@@ -6,3 +6,4 @@ class StapleDetectionMethod(Enum):
     HORIZONTAL_GRADIENT = 1
     COMBINED_GRADIENT = 2
     CANNY = 3
+    DISCRETE_MORPHOLOGY = 4
